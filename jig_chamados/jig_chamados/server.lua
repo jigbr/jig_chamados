@@ -18,8 +18,8 @@ vRPclient = Tunnel.getInterface("vRP")
 -- /CHAMAR
 -----------------------------------------------------------------------------------------------------------------------------------------
 
-local empregos = {
-    ['mec'] = {perm = 'mecanico.permissao'},
+local empregos = { -- Aqui você pode adicionar novos grupos que poderão ser chamados utilizando esse mesmo sistema, primeiro você insere o argumento usado para chamar e depois a permissão respectiva.
+    ['mec'] = {perm = 'mecanico.permissao'}, 
     ['samu'] = {perm = 'samu.permissao'},
 }
 
@@ -40,14 +40,14 @@ RegisterCommand("chamar", function(source, args)
         end
         table.sort(sorted, function(a,b) return a.distance < b.distance end)
         for _,user in pairs(sorted) do
-            if source and vRP.request(user.source, 'Deseja aceitar o chamado de ' ..identity.name.. '?', 5) then
+            if source and vRP.request(user.source, 'Deseja aceitar o chamado de ' ..identity.name.. '?', 10) then
                 TriggerClientEvent("Notify", source, 'sucesso', 'Chamado aceito por <b>' .. vRP.getUserIdentity(user.id).name .. '</b>, Aguarde no local!')
                 vRPclient.playSound(source,"Event_Message_Purple","GTAO_FM_Events_Soundset")
                 vRPclient._setGPS(user.source, pcds.x, pcds.y)
                 return             
             end  
         end
-        TriggerClientEvent("Notify", source, 'negado', 'chamado nao aceito.' )
+        TriggerClientEvent("Notify", source, 'negado', 'Todos os trabalhadores estão ocupados! Tente novamente mais tarde!' )
     end
 end)
 
