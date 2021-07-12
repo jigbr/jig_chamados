@@ -31,6 +31,10 @@ RegisterCommand("chamar", function(source, args)
         if table.count(users) == 0 then
             TriggerClientEvent("Notify", source, 'negado', 'Não existe pessoas trabalhando nesse emprego no momento.') return
         end
+        local descricao = vRP.prompt(source,"Descrição:","")
+        if descricao == "" then
+			return
+		end
         TriggerClientEvent("Notify", source, 'sucesso', 'Chamado feito com sucesso, aguarde!')
         local sorted = {}
         for user_id,source in pairs(users) do
@@ -40,7 +44,7 @@ RegisterCommand("chamar", function(source, args)
         end
         table.sort(sorted, function(a,b) return a.distance < b.distance end)
         for _,user in pairs(sorted) do
-            if source and vRP.request(user.source, 'Deseja aceitar o chamado de ' ..identity.name.. '?', 10) then
+            if source and vRP.request(user.source, 'Deseja aceitar o chamado de ' ..identity.name.. '? ' '"'..descricao..'"', 10) then
                 TriggerClientEvent("Notify", source, 'sucesso', 'Chamado aceito por <b>' .. vRP.getUserIdentity(user.id).name .. '</b>, Aguarde no local!')
                 vRPclient.playSound(source,"Event_Message_Purple","GTAO_FM_Events_Soundset")
                 vRPclient._setGPS(user.source, pcds.x, pcds.y)
